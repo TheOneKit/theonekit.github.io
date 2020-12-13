@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
+    "typeRoots": [ "./type" ],
+    "lib": [ "es2015" ],
+    "outFile": "dist/index.js",
+  },
+  "include": ["src/**/*.js",],
+  "exclude": ["node_modules", "**/node_modules/*"],
+}

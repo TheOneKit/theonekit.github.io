@@ -1,0 +1,357 @@
+
+<script src="https://theonekit.github.io/index.js"></script>
+
+<div id="mount-point"></div>
+
+<script>
+  (function () {
+
+    const {
+      createElement: h,
+    } = React;
+
+    const {
+      One,
+    } = form;
+
+    const {
+      SquareFoot,
+      LensOutlined,
+      VolumeDown,
+      VolumeUp,
+    } = material.icons;
+
+    const Logger = (props) => h('i', null, 
+      h('pre', null, 
+        JSON.stringify(props, Object.keys(props).sort(), 2)
+      )
+    );
+
+    const focus = () => console.log('focus');
+    const blur = () => console.log('blur');
+
+    const fields = [
+      {
+        type: "group",
+        fields: [
+          {
+            type: "line",
+            title: "Вид стекла"
+          },
+          {
+            title: "Бронза",
+            columns: "4",
+            type: "checkbox",
+            name: "Бронза"
+          },
+          {
+            title: "Матовое",
+            columns: "4",
+            type: "checkbox",
+            name: "Матовое"
+          },
+          {
+            title: "Осветленное",
+            type: "checkbox",
+            columns: "4",
+            name: "Осветленное"
+          },
+          {
+            title: "Прозрачное",
+            type: "checkbox",
+            columns: "4",
+            name: "Прозрачное"
+          },
+          {
+            title: "Серое",
+            columns: "4",
+            type: "checkbox",
+            name: "Серое"
+          },
+          {
+            type: "group",
+            fields: [
+              {
+                type: "line",
+                title: "Толщина стекла"
+              },
+              {
+                title: "10 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "10 мм"
+              },
+              {
+                title: "12 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "12 мм"
+              },
+              {
+                title: "3 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "3 мм"
+              },
+              {
+                title: "4 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "4 мм"
+              },
+              {
+                title: "5 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "5 мм"
+              },
+              {
+                title: "6 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "6 мм"
+              },
+              {
+                title: "8 мм",
+                type: "radio",
+                name: "Толщина стекла",
+                radioValue: "8 мм"
+              },
+              {
+                type: "group",
+                fields: [
+                  {
+                    type: "line",
+                    title: "Форма изделия"
+                  },
+                  {
+                    type: "group",
+                    columns: "6",
+                    fields: [
+                      {
+                        type: "line",
+                        title: "Круг"
+                      },
+                      {
+                        title: "Диаметр",
+                        type: "text",
+                        name: "Диаметр",
+                        defaultValue: 5,
+                        leadingIcon: LensOutlined,
+                      },
+                      {
+                        type: "group",
+                        fields: [
+                          {
+                            type: "line",
+                            title: "Обработка (круг)"
+                          },
+                          {
+                            title: "Полировка",
+                            type: "text",
+                            name: "Полировка"
+                          },
+                          {
+                            title: "Резка",
+                            type: "text",
+                            name: "Резка"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    type: "group",
+                    columns: "6",
+                    fields: [
+                      {
+                        type: "line",
+                        title: "Прямоугольник"
+                      },
+                      {
+                        title: "Длинна",
+                        type: "text",
+                        name: "Длинна",
+                        defaultValue: 10,
+                        inputType: 'number',
+                        trailingIcon: SquareFoot,
+                        isInvalid(obj) {
+                          if (obj["Длинна"] < 10) {
+                            return "Длинна не может быть меньше 10";
+                          } else {
+                            return null
+                          }
+                        },
+                        trailingIconClick(v, onChange) { alert(v) }
+                      },
+                      {
+                        title: "Ширина",
+                        type: "text",
+                        name: "Ширина",
+                        defaultValue: 20,
+                        isInvalid(obj) {
+                          if (obj["Ширина"] < 20) {
+                            return "Ширина не может быть меньше 20";
+                          } else {
+                            return null
+                          }
+                        },
+                        inputType: 'number',
+                        trailingIcon: SquareFoot,
+                      },
+                      {
+                        title: "Площадь",
+                        type: "text",
+                        compute: (obj) => obj["Длинна"] * obj["Ширина"],
+                        inputType: 'number',
+                      },
+                      {
+                        type: "line",
+                        title: "Доступно 500 единиц объема"
+                      },
+                      {
+                        type: "progress",
+                        compute: (obj) => obj["Длинна"] * obj["Ширина"],
+                        /*progressBarColor(percent) {
+                          if (percent < 10) {
+                            return 'maroon';
+                          } else if (percent < 30) {
+                            return 'red';
+                          } else if (percent < 60) {
+                            return 'orange';
+                          } else if (percent < 80) {
+                            return 'lime';
+                          } else {
+                            return 'green';
+                          }
+                        },*/
+                        /*progressColor(percent) {
+                          if (percent < 10) {
+                            return '#8000008c';
+                          } else if (percent < 30) {
+                            return '#ff00006b';
+                          } else if (percent < 60) {
+                            return '#ffa50070';
+                          } else if (percent < 80) {
+                            return '#00ff006b';
+                          } else {
+                            return '#00800061';
+                          }
+                        },*/
+                        maxPercent: 500,
+                      },
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        type: "group",
+        fields: [
+          {
+            type: "line",
+            title: "Комментарий"
+          },
+          {
+            title: "Комментарий",
+            type: "text",
+            name: "Комментарий",
+            inputRows: 5,
+          },
+        ]
+      },
+      {
+        type: "group",
+        fields: [
+          {
+            type: "line",
+            title: "Способ доставки"
+          },
+          {
+            title: "Самовывоз",
+            type: "switch",
+            name: "Самовывоз",
+            inputType: 'date',
+          },
+          {
+            title: "Адрес",
+            type: "text",
+            name: "Адрес",
+            focus, blur,
+            isDisabled: (obj) => obj["Самовывоз"]
+          },
+        ]
+      },
+      {
+        type: "line",
+        title: "Слайдер",
+      },
+      {
+        type: "slider",
+        name: "Слайдер",
+        leadingIcon: VolumeDown,
+        trailingIcon: VolumeUp,
+        leadingIconClick(v, onChange) { onChange(v - 1) },
+        trailingIconClick(v, onChange) { onChange(v + 1) }
+      },
+      {
+        type: "line",
+        title: "Списки",
+      },
+      {
+        type: "group",
+        fields: [
+          {
+            type: "group",
+            columns: "6",
+            fields: [
+              {
+                type: "combo",
+                title: "Выбор Элемента",
+                description: "Выбор одного элемента",
+                name: "Выбор Элемента",
+                itemList: ["Элемент 1", "Элемент 2", "Элемент 3"]
+              },
+            ]
+          },
+          {
+            type: "group",
+            columns: "6",
+            fields: [
+              {
+                type: "items",
+                title: "Выбор Элементов",
+                description: "Выбор нескольких элементов",
+                name: "Выбор Элементов",
+                itemList: ["Элемент 1", "Элемент 2", "Элемент 3"]
+              },
+            ]
+          },
+        ]
+      },
+      {
+        type: "line",
+        title: "Пользовательский компонент"
+      },
+      {
+        type: "component",
+        compute: Logger,
+      },
+      {
+        type: "rating",
+        name: "Рейтинг"
+      }
+    ];
+
+    const change = (obj) => console.log({ obj });
+
+    const App = () => h(One, { fields, change });
+
+    ReactDOM.render(h(App), document.getElementById('mount-point'));
+
+  })();
+
+</script>
