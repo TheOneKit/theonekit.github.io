@@ -172,7 +172,7 @@
 
   const Rect = ({children}) => (
     <Paper>
-      <Box display="flex" alignItems="center" justifyContent="center" p={2}>
+      <Box display="flex" alignItems="center" justifyContent="center" p={1}>
         {children}
       </Box>
     </Paper>
