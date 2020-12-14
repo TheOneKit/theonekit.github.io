@@ -201,7 +201,7 @@
       width: '100vw',
       background: 'none',
       transition: 'background 1s',
-      zIndex: 9999,
+      zIndex: 999,
     },
     filled: {
       backdropFilter: 'saturate(180%) blur(20px)',
