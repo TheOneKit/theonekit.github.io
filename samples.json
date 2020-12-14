@@ -193,6 +193,7 @@
       "    name: 'slider',",
       "    leadingIcon: VolumeDown,",
       "    trailingIcon: VolumeUp,",
+      "    defaultValue: 30,",
       "    leadingIconClick(v, onChange) { onChange(v - 1) },",
       "    trailingIconClick(v, onChange) { onChange(v + 1) },",
       "  },",
