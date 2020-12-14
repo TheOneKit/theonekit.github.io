@@ -33,7 +33,7 @@
         main: '#90cbf9',
       },
       secondary: {
-        main: '#f48fb1',
+        main: '#90cbf9',
       },
       text: {
         primary: "#fff",
@@ -58,7 +58,7 @@
         main: '#1976d2',
       },
       secondary: {
-        main: '#dc004e',
+        main: '#1976d2',
       },
       text: {
         primary: "rgba(0, 0, 0, 0.87)",
