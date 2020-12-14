@@ -1,6 +1,7 @@
 (function() {
 
-  const {origin} = location;
+  const {protocol} = location;
+  const origin = `${protocol}//theonekit.github.io`;
 
   const template = (url) => `\x3Cscript type="text/javascript" src="${origin}/${url}">\x3C/script>`;
 
