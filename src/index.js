@@ -5,6 +5,13 @@
     createMuiTheme,
     makeStyles,
   } = material.core;
+  
+  const {
+    DateProvider,
+    TimeProvider,
+    useDate,
+    useTime,
+  } = pickers;
 
   const TabPanel = ({
     children,
@@ -163,6 +170,8 @@
     Brightness4,
     VolumeDown,
     VolumeUp,
+    CalendarToday,
+    Alarm,
   } = material.icons;
 
   const {
@@ -398,6 +407,8 @@
   }) => {
     const classes = useDemoStyles();
     const [index, setIndex] = useState(0);
+    const pickDate = useDate();
+    const pickTime = useTime();
     return (
       <Paper className={classes.root}>
         <Tabs
@@ -488,14 +499,18 @@
     return (
       <MuiThemeProvider theme={isDark ? THEME_DARK : THEME_LIGHT}>
         <DarkModeContext.Provider value={isDark}>
-          <CssBaseline />
-          <Header
-            onIsDarkChange={() => setIsDark(!isDark)}
-            isDark={isDark}
-          />
-          <Container>
-            <Content isDark={isDark} />
-          </Container>
+          <DateProvider>
+            <TimeProvider>
+              <CssBaseline />
+              <Header
+                onIsDarkChange={() => setIsDark(!isDark)}
+                isDark={isDark}
+              />
+              <Container>
+                <Content isDark={isDark} />
+              </Container>
+            </TimeProvider>
+          </DateProvider>
         </DarkModeContext.Provider>
       </MuiThemeProvider>
     );
