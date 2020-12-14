@@ -298,16 +298,15 @@
     const classes = useHeaderStyles();
     const [isFilled, setIsFilled] = useState(isScrolled());
     useEffect(() => {
-      const handler = () => {
-        if (isScrolled()) {
+      const interval = setInterval(() => {
+        if (isScrolled() && !isFilled) {
           setIsFilled(true);
-        } else {
+        } else if (!isScrolled() && isFilled) {
           setIsFilled(false);
         }
-      };
-      window.addEventListener('scroll', handler);
-      return () => window.removeEventListener('scroll', handler);
-    }, []);
+      });
+      return () => clearInterval(interval);
+    }, [isFilled]);
     return (
       <Fragment>
         <Headline
@@ -343,11 +342,9 @@
   const Editor = ({
     lines = [ "" ],
   }) => {
-
     const isDark = useContext(DarkModeContext);
     const elementRef = useRef(null);
     const aceRef = useRef(null);
-
     useLayoutEffect(() => {
       const editor = ace.edit(elementRef.current);
       editor.session.setMode("ace/mode/javascript");
@@ -504,6 +501,6 @@
     );
   };
 
-  setTimeout(() => ReactDOM.render(<App />, document.querySelector('#mount-point')));
+  ReactDOM.render(<App />, document.querySelector('#mount-point'));
 
 })();

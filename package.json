@@ -2,7 +2,7 @@
   "name": "the-one-kit",
   "version": "1.0.0",
   "scripts": {
-    "start": "http-server & open-cli http://127.0.0.1:8080",
+    "start": "open-cli http://127.0.0.1:8080 & http-server",
     "lint": "(yaspeller ./README.md &)"
   },
   "devDependencies": {
