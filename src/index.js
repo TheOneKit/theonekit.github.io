@@ -30,10 +30,10 @@
     palette: {
       type: 'dark',
       primary: {
-        main: '#f48fb1',
+        main: '#90cbf9',
       },
       secondary: {
-        main: '#90cbf9',
+        main: '#f48fb1',
       },
       text: {
         primary: "#fff",
