@@ -159,17 +159,17 @@
       "support"
     ],
     "lines": [
-      "<One blur={() => console.log('blur c')} fields={[",
+      "<One blur={() => snack('blur c')} fields={[",
       "  {",
       "    type: FieldType.Text,",
       "    name: 'a',",
-      "    focus() { console.log('focus a') },",
-      "    blur() { console.log('blur a') },",
+      "    focus() { snack('focus a') },",
+      "    blur() { snack('blur a') },",
       "  },",
       "  {",
       "    type: FieldType.Text,",
       "    name: 'b',",
-      "    focus() { console.log('focus b') },",
+      "    focus() { snack('focus b') },",
       "  }",
       "]}/>",
       ""

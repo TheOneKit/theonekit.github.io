@@ -13,6 +13,11 @@
     useTime,
   } = pickers;
 
+  const {
+    SnackProvider,
+    useSnack,
+  } = other.snack;
+
   const TabPanel = ({
     children,
     value,
@@ -409,6 +414,7 @@
     const [index, setIndex] = useState(0);
     const pickDate = useDate();
     const pickTime = useTime();
+    const snack = useSnack();
     return (
       <Paper className={classes.root}>
         <Tabs
@@ -501,14 +507,16 @@
         <DarkModeContext.Provider value={isDark}>
           <DateProvider>
             <TimeProvider>
-              <CssBaseline />
-              <Header
-                onIsDarkChange={() => setIsDark(!isDark)}
-                isDark={isDark}
-              />
-              <Container>
-                <Content isDark={isDark} />
-              </Container>
+              <SnackProvider>
+                <CssBaseline />
+                <Header
+                  onIsDarkChange={() => setIsDark(!isDark)}
+                  isDark={isDark}
+                />
+                <Container>
+                  <Content isDark={isDark} />
+                </Container>
+              </SnackProvider>
             </TimeProvider>
           </DateProvider>
         </DarkModeContext.Provider>
