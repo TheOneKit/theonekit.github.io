@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <script src="./index.js"></script>
     <style>
-      html { background: #212121; user-select: none; }
+      html {
+        background: #212121;
+        user-select: none;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      body::-webkit-scrollbar-button,
+      body::-webkit-scrollbar-track,
+      body::-webkit-scrollbar-thumb,
+      body::-webkit-scrollbar {
+        display: none;
+      }
     </style>
     <script src="./3rdparty/ace@1.4.12/ace.js"></script>
     <script src="./3rdparty/ace@1.4.12/mode-javascript.js"></script>

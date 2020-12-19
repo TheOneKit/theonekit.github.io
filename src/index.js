@@ -216,7 +216,8 @@
       }
     },
     stretch: {
-      paddingTop: '5px',
+      display: 'flex',
+      alignItems: 'center',
       flex: 1,
     },
     adjust: {
