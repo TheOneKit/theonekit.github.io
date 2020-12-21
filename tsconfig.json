@@ -3,7 +3,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "typeRoots": [ "./type" ],
-    "lib": [ "es2015" ],
+    "lib": [ "es2018" ],
     "outFile": "dist/index.js",
   },
   "include": ["src/**/*.js",],

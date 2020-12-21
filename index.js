@@ -14,6 +14,8 @@
   window.Redux || document.write(template("3rdparty/redux@v4.0.5/redux.min.js"));
   window.Babel || document.write(template("3rdparty/@babel/standalone@7.12.4/babel.min.js"));
   window.moment || document.write(template("3rdparty/moment@2.29.1/moment.min.js"));
+  window.mobx || document.write(template("3rdparty/mobx@6.0.4/mobx.umd.development.js"));
+  window.mobxReactLite || document.write(template("3rdparty/mobx-react-lite@3.1.6/mobxreactlite.umd.development.js"));
 
   window.material || document.write(template("3rdparty/material-ui-umd@1.1/material-ui.min.js"));
   window.form || document.write(template("3rdparty/material-ui-umd@1.1/form-tools.js"));
