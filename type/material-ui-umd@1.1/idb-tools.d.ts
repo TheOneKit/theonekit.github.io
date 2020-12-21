@@ -1,4 +1,4 @@
-/// <reference path="./material-ui.d.ts"/>
+/// <reference types="react" />
 declare namespace idb {
     type Constructor = new (...args: any[]) => any;
     type Func = (...args: any[]) => any;

@@ -1,4 +1,3 @@
-/// <reference path="./material-ui.d.ts"/>
 declare var module: any;
 declare var require: any;
 declare var module: any;
@@ -68,7 +67,8 @@ declare namespace pickers {
 }
 declare namespace pickers {
     namespace components {
-        const ClockNumber: ({ selected, label, index, }: {
+        const ClockNumber: ({ selected, label, index, ...otherProps }: {
+            [x: string]: any;
             selected?: boolean;
             label?: string;
             index?: number;

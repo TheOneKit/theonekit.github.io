@@ -1,4 +1,4 @@
-/// <reference path="./material-ui.d.ts"/>
+/// <reference types="react" />
 declare namespace chart {
     type func = (...args: any[]) => any;
     export interface IChartConfiguration {

@@ -1,11 +1,3 @@
-
-/// <reference path="./chart-tools.d.ts"/>
-/// <reference path="./form-tools.d.ts"/>
-/// <reference path="./idb-tools.d.ts"/>
-/// <reference path="./other-tools.d.ts"/>
-/// <reference path="./picker-tools.d.ts"/>
-/// <reference path="./router-tools.d.ts"/>
-
 declare namespace material {
     namespace icons {
         const AccessAlarm: Component;

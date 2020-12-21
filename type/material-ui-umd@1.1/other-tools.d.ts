@@ -1,4 +1,4 @@
-/// <reference path="./material-ui.d.ts"/>
+/// <reference types="react" />
 declare namespace other {
     namespace snack {
         enum SnackType {
@@ -239,6 +239,21 @@ declare namespace other {
     }
 }
 declare namespace other {
+    namespace components {
+        class ErrorBoundary extends React.Component<error.IErrorBoundaryProps, any> {
+            static defaultProps: {
+                ErrorPlaceholder: any;
+            };
+            constructor(props: any);
+            static getDerivedStateFromError(): {
+                hasError: boolean;
+            };
+            componentDidCatch(error: any, errorInfo: any): void;
+            render(): {};
+        }
+    }
+}
+declare namespace other {
     namespace snack {
         const SnackProvider: ({ children, }: {
             children?: any;
@@ -257,5 +272,17 @@ declare namespace other {
     namespace i11n {
         const TranslationProvider: ({ children, locale, }: ITranslationProviderProps) => JSX.Element;
         const useTr: () => (template: TemplateStringsArray, ...substitutions: any[]) => string;
+    }
+    namespace error {
+        const ErrorBoundary: typeof components.ErrorBoundary;
+    }
+}
+declare namespace other {
+    namespace error {
+        class IErrorBoundaryProps {
+            ErrorPlaceholder?: material.Component;
+            onError: (error: any, errorInfo: any) => void;
+            children?: React.ReactNode;
+        }
     }
 }

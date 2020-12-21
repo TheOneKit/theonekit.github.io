@@ -1,4 +1,4 @@
-/// <reference path="./material-ui.d.ts"/>
+/// <reference types="react" />
 declare var module: any;
 declare var require: any;
 declare var module: any;

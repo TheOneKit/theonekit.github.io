@@ -1,4 +1,4 @@
-/// <reference path="./material-ui.d.ts"/>
+/// <reference types="react" />
 declare var module: any;
 declare var require: any;
 declare var module: any;
@@ -9,6 +9,7 @@ declare namespace form {
         Switch = "switch",
         Line = "line",
         Group = "group",
+        Paper = "paper",
         Expansion = "expansion",
         Radio = "radio",
         Checkbox = "checkbox",
@@ -207,7 +208,7 @@ declare namespace form {
         /**
          * Позволяет загружать данные в компонент
          */
-        handler?: () => Promise<any> | any;
+        handler?: any | (Promise<any>);
         /**
          * Вызывается при ошибке в handler
          */
@@ -416,6 +417,34 @@ declare namespace form {
     }
 }
 declare namespace form {
+    namespace utils {
+        const deepMerge: (target: any, ...sources: any[]) => any;
+    }
+}
+declare namespace form {
+    namespace utils {
+        type Func<T extends any[], R> = (...a: T) => R;
+        /**
+         * Composes single-argument functions from right to left. The rightmost
+         * function can take multiple arguments as it provides the signature for the
+         * resulting composite function.
+         *
+         * @param funcs The functions to compose.
+         * @returns A function obtained by composing the argument functions from right
+         *   to left. For example, `compose(f, g, h)` is identical to doing
+         *   `(...args) => f(g(h(...args)))`.
+         */
+        export function compose(): <R>(a: R) => R;
+        export function compose<F extends Function>(f: F): F;
+        export function compose<A, T extends any[], R>(f1: (a: A) => R, f2: Func<T, A>): Func<T, R>;
+        export function compose<A, B, T extends any[], R>(f1: (b: B) => R, f2: (a: A) => B, f3: Func<T, A>): Func<T, R>;
+        export function compose<A, B, C, T extends any[], R>(f1: (c: C) => R, f2: (b: B) => C, f3: (a: A) => B, f4: Func<T, A>): Func<T, R>;
+        export function compose<R>(f1: (a: any) => R, ...funcs: Function[]): (...args: any[]) => R;
+        export function compose<R>(...funcs: Function[]): (...args: any[]) => R;
+        export {};
+    }
+}
+declare namespace form {
     namespace hooks {
         interface IProps {
             children?: React.ReactChildren;
@@ -498,6 +527,19 @@ declare namespace form {
             [x: string]: any;
             title?: string;
             description?: string;
+            className?: string;
+            columns?: string;
+            phoneColumns?: string;
+            tabletColumns?: string;
+            desktopColumns?: string;
+            children?: any;
+        }) => JSX.Element;
+    }
+}
+declare namespace form {
+    namespace components {
+        const Paper: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, children, ...otherProps }: {
+            [x: string]: any;
             className?: string;
             columns?: string;
             phoneColumns?: string;
@@ -676,6 +718,7 @@ declare namespace form {
         saveDisabled?: boolean;
         className?: string;
     }) => JSX.Element;
+    const compose: typeof utils.compose;
 }
 declare namespace form {
     /**
