@@ -445,6 +445,11 @@ declare namespace form {
     }
 }
 declare namespace form {
+    namespace utils {
+        const createKey: () => string;
+    }
+}
+declare namespace form {
     namespace hooks {
         interface IProps {
             children?: React.ReactChildren;
@@ -719,6 +724,7 @@ declare namespace form {
         className?: string;
     }) => JSX.Element;
     const compose: typeof utils.compose;
+    const createKey: () => string;
 }
 declare namespace form {
     /**

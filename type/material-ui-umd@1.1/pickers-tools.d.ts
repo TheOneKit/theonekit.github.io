@@ -37,9 +37,10 @@ declare namespace pickers {
 }
 declare namespace pickers {
     namespace components {
-        const ModalDialog: ({ children, onAccept, onDismiss, ...other }: {
+        const ModalDialog: ({ children, dividers, onAccept, onDismiss, ...other }: {
             [x: string]: any;
             children?: any;
+            dividers?: boolean;
             onAccept?: () => void;
             onDismiss?: () => void;
         }) => JSX.Element;
@@ -196,6 +197,22 @@ declare namespace pickers {
     }
 }
 declare namespace pickers {
+    namespace components {
+        const PromptProvider: ({ children, }: {
+            children?: any;
+        }) => JSX.Element;
+        const usePrompt: () => any;
+    }
+}
+declare namespace pickers {
+    namespace components {
+        const RadioProvider: ({ children, }: {
+            children?: any;
+        }) => JSX.Element;
+        const useRadio: () => any;
+    }
+}
+declare namespace pickers {
     const TimeProvider: ({ children, }: {
         children?: any;
     }) => JSX.Element;
@@ -204,4 +221,12 @@ declare namespace pickers {
         children?: any;
     }) => JSX.Element;
     const useDate: () => any;
+    const PromptProvider: ({ children, }: {
+        children?: any;
+    }) => JSX.Element;
+    const usePrompt: () => any;
+    const RadioProvider: ({ children, }: {
+        children?: any;
+    }) => JSX.Element;
+    const useRadio: () => any;
 }
