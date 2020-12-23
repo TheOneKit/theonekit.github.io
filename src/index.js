@@ -326,7 +326,7 @@
       <Fragment>
         <Headline
           onIsDarkChange={onIsDarkChange}
-          onGithubClick={() => openBlank('https://github.com/tripolskypetr/material-ui-umd/')}
+          onGithubClick={() => openBlank('https://github.com/tripolskypetr/material-ui-umd/tree/master/lib/form-tools')}
           isFilled={isFilled}
           isDark={isDark}
         />
