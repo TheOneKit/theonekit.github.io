@@ -304,6 +304,11 @@
       "      Form generator",
       "    </Link>",
       "  </Typography>",
+      "  <Typography>",
+      "    <Link href='./amazing-controlpanel/' target='_blank'>",
+      "      Control panel",
+      "    </Link>",
+      "  </Typography>",
       "</div>",
       ""
     ]
