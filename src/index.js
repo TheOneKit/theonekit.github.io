@@ -1,4 +1,4 @@
-(function () {
+(function (global) {
 
   const {
     MuiThemeProvider,
@@ -131,6 +131,7 @@
     a.click();
   };
 
+  global.openBlank = openBlank;
 
   const isDarkMode = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isScrolled = () => window.scrollY > 10;
@@ -527,4 +528,4 @@
 
   ReactDOM.render(<App />, document.querySelector('#mount-point'));
 
-})();
+})(window);
