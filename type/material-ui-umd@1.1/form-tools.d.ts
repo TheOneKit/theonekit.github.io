@@ -184,6 +184,12 @@ declare namespace form {
          * Значение по-умолчанию для поля
          */
         defaultValue?: string | number | boolean;
+        /**
+         * Позволяет выключить отступ справа для поля. Можно использовать
+         * по аналогии с исключением последней запятой при склеивании массива
+         * руками, если раздражает
+         */
+        skipRightMargin?: boolean;
     }
     export {};
 }
@@ -228,7 +234,7 @@ declare namespace form {
          * Вызывается после изменения и передает измененный
          * объект прикладному программисту
          */
-        change?: (object: any) => void;
+        change?: (object: any, initial?: boolean) => void;
         /**
          * Массив полей, выводимый в компоненте
          */
@@ -469,7 +475,13 @@ declare namespace form {
 }
 declare namespace form {
     namespace hooks {
-        type useResolvedHook = (handler: () => Promise<any> | any, fallback: (e: Error) => void, fields: IField[]) => [any, (v: any) => void];
+        interface IResolvedHookProps {
+            handler: () => Promise<any> | any;
+            fallback: (e: Error) => void;
+            fields: IField[];
+            change: (obj: any, initial?: boolean) => void;
+        }
+        type useResolvedHook = (props: IResolvedHookProps) => [any, (v: any) => void];
         /**
          * Хук разрешает обработчик на корневом уровне, при чем только
          * один раз. Для дочерних One компонентов осуществляется
@@ -523,6 +535,7 @@ declare namespace form {
             children?: any;
             isItem?: boolean;
             style?: any;
+            skipRightMargin?: boolean;
         }, React.ReactText> & React.RefAttributes<unknown>>;
     }
 }
@@ -561,12 +574,12 @@ declare namespace form {
          *    представлены invalid, disabled, visible и можно задваивать вызов onChange
          *  - Управляет фокусировкой, мануально ожидая потерю фокуса, эмулируя onBlur
          */
-        const makeManaged: (Component: material.Component<IManaged>, skipDebounce?: boolean) => ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const makeManaged: (Component: material.Component<IManaged>, skipDebounce?: boolean) => ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const CheckboxField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const CheckboxField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -584,47 +597,47 @@ declare namespace form {
 }
 declare namespace form {
     namespace fields {
-        const RadioField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const RadioField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const SwitchField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const SwitchField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const TextField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const TextField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const ProgressField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const ProgressField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const ComponentField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const ComponentField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const SliderField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const SliderField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const ComboField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const ComboField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const ItemsField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const ItemsField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const RatingField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, ...otherProps }: IEntity) => JSX.Element;
+        const RatingField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, skipRightMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
