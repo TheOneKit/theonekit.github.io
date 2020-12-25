@@ -32,11 +32,7 @@ declare namespace form {
          * Общие поля. Поле name позволяет задать забор
          * поля из целевого объекта, не нужен для group,
          * expansion и line.
-         *  - Поле id пробрасывается в аттрибуты корневого
-         * блока компонента на странице и не используется в
-         * компоненте List.
          */
-        id?: string;
         name?: string;
         /**
          * Коллбеки, вызываемый при фокусировкеи потере фокуса.
@@ -77,8 +73,8 @@ declare namespace form {
          * окна, расположенного в коде прикладного программиста. Коллбек
          * получает на вход текущее значение поля и функцию onChange...
          */
-        leadingIconClick?: (value: any, onChange: CallableFunction) => void;
-        trailingIconClick?: (value: any, onChange: CallableFunction) => void;
+        leadingIconClick?: (value: any, onChange?: (v: any) => void) => void;
+        trailingIconClick?: (value: any, onChange?: (v: any) => void) => void;
         /**
          * Максимальное число для высчитывания процента
          * (минимальное число всегда ноль)
@@ -248,6 +244,13 @@ declare namespace form {
          * Плейсхолдер, показываемый во время загрузки данных
          */
         LoadPlaceholder?: null | material.Element;
+    }
+    /**
+     * После написания формы можно включить
+     * строгую проверку полей
+     */
+    interface IOneTypedProps extends Omit<IOneProps, 'fields'> {
+        fields: TypedField[];
     }
 }
 declare namespace form {
@@ -542,17 +545,67 @@ declare namespace form {
     }
 }
 declare namespace form {
+    export type PickProp<T extends {}, P extends keyof T> = T[P];
+    /**
+     * Возможные значения value
+     */
+    type v = number | string | boolean;
+    /**
+     * Типизацию компоновки следует вынести отдельно
+     */
+    export interface IManagedLayout {
+        columns?: PickProp<IField, 'columns'>;
+        phoneColumns?: PickProp<IField, 'phoneColumns'>;
+        tabletColumns?: PickProp<IField, 'tabletColumns'>;
+        desktopColumns?: PickProp<IField, 'desktopColumns'>;
+        fieldRightMargin?: PickProp<IField, 'fieldRightMargin'>;
+        fieldBottomMargin?: PickProp<IField, 'fieldBottomMargin'>;
+    }
+    /**
+     * Компонент высшего порядка makeManaged
+     * перехватывает управление над свойствами
+     * поля
+     */
+    export interface IManagedShallow extends IManagedLayout {
+        isDisabled?: PickProp<IField, 'isDisabled'>;
+        isVisible?: PickProp<IField, 'isVisible'>;
+        isInvalid?: PickProp<IField, 'isInvalid'>;
+        compute?: PickProp<IField, 'compute'>;
+        defaultValue?: v;
+    }
+    /**
+     * Свойства, не доступные управляемому полю
+     */
+    type Exclude = {
+        object: never;
+        type: never;
+        focus: never;
+        blur: never;
+        ready: never;
+        change: never;
+        name: never;
+    } & IManagedShallow;
+    /**
+     * Свойства сущности, обернутой в компонент высшего порядка
+     * Предоставляется удобная абстракция
+     */
+    export interface IManaged extends Omit<IEntity, keyof Exclude> {
+        value: v;
+        disabled: boolean;
+        invalid: string | null;
+        onChange: (v: v) => void;
+    }
+    export {};
+}
+declare namespace form {
     namespace components {
-        const Expansion: ({ title, description, className, columns, phoneColumns, tabletColumns, desktopColumns, children, ...otherProps }: {
-            [x: string]: any;
-            title?: string;
-            description?: string;
-            className?: string;
-            columns?: string;
-            phoneColumns?: string;
-            tabletColumns?: string;
-            desktopColumns?: string;
-            children?: any;
+        interface IExpansionProps extends IManagedLayout {
+            title?: PickProp<IField, 'title'>;
+            description?: PickProp<IField, 'description'>;
+            className?: PickProp<IField, 'className'>;
+        }
+        const Expansion: ({ title, description, className, columns, phoneColumns, tabletColumns, desktopColumns, children, ...otherProps }: IExpansionProps & {
+            children: any;
         }) => JSX.Element;
     }
 }
@@ -576,69 +629,149 @@ declare namespace form {
          *    представлены invalid, disabled, visible и можно задваивать вызов onChange
          *  - Управляет фокусировкой, мануально ожидая потерю фокуса, эмулируя onBlur
          */
-        const makeManaged: (Component: material.Component<IManaged>, skipDebounce?: boolean) => ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        function makeManaged(Component: React.FC<Partial<IManaged>>, skipDebounce?: boolean): ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface ICheckboxFieldProps {
+            disabled: PickProp<IManaged, 'disabled'>;
+            value: PickProp<IManaged, 'value'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+            title: PickProp<IManaged, 'title'>;
+        }
         const CheckboxField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
-        const LineField: ({ className, columns, title, phoneColumns, tabletColumns, desktopColumns, styles, }: {
-            className?: string;
-            columns?: string;
-            title?: string;
-            phoneColumns?: string;
-            tabletColumns?: string;
-            desktopColumns?: string;
-            styles?: any;
-        }) => JSX.Element;
+        interface ILineFieldProps {
+            title: PickProp<IManaged, 'title'>;
+        }
+        const LineField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IRadioFieldProps {
+            disabled: PickProp<IManaged, 'disabled'>;
+            value: PickProp<IManaged, 'value'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+            title: PickProp<IManaged, 'title'>;
+            radioValue: PickProp<IManaged, 'radioValue'>;
+        }
         const RadioField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface ISwitchFieldProps {
+            disabled: PickProp<IManaged, 'disabled'>;
+            value: PickProp<IManaged, 'value'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+            title: PickProp<IManaged, 'title'>;
+        }
         const SwitchField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface ITextFieldProps {
+            invalid: PickProp<IManaged, 'invalid'>;
+            value: PickProp<IManaged, 'value'>;
+            disabled: PickProp<IManaged, 'disabled'>;
+            inputType: PickProp<IManaged, 'inputType'>;
+            description: PickProp<IManaged, 'description'>;
+            outlined: PickProp<IManaged, 'outlined'>;
+            title: PickProp<IManaged, 'title'>;
+            leadingIcon: PickProp<IManaged, 'leadingIcon'>;
+            trailingIcon: PickProp<IManaged, 'trailingIcon'>;
+            leadingIconClick: PickProp<IManaged, 'leadingIconClick'>;
+            trailingIconClick: PickProp<IManaged, 'trailingIconClick'>;
+            inputRows: PickProp<IManaged, 'inputRows'>;
+            placeholder: PickProp<IManaged, 'placeholder'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+        }
         const TextField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IProgressFieldProps {
+            progressBarColor: PickProp<IManaged, 'progressBarColor'>;
+            progressColor: PickProp<IManaged, 'progressColor'>;
+            maxPercent: PickProp<IManaged, 'maxPercent'>;
+            showPercentLabel: PickProp<IManaged, 'showPercentLabel'>;
+            value: PickProp<IManaged, 'value'>;
+        }
         const ProgressField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IComponentFieldProps {
+            value: PickProp<IManaged, 'value'>;
+        }
         const ComponentField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface ISliderFieldProps {
+            value: PickProp<IManaged, 'value'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+            leadingIcon: PickProp<IManaged, 'leadingIcon'>;
+            trailingIcon: PickProp<IManaged, 'trailingIcon'>;
+            leadingIconClick: PickProp<IManaged, 'leadingIconClick'>;
+            trailingIconClick: PickProp<IManaged, 'trailingIconClick'>;
+            sliderThumbColor: PickProp<IManaged, 'sliderThumbColor'>;
+            sliderTrackColor: PickProp<IManaged, 'sliderTrackColor'>;
+            sliderRailColor: PickProp<IManaged, 'sliderRailColor'>;
+        }
         const SliderField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IComboFieldProps {
+            value: PickProp<IManaged, 'value'>;
+            disabled: PickProp<IManaged, 'disabled'>;
+            description: PickProp<IManaged, 'description'>;
+            placeholder: PickProp<IManaged, 'placeholder'>;
+            outlined: PickProp<IManaged, 'outlined'>;
+            itemList: PickProp<IManaged, 'itemList'>;
+            title: PickProp<IManaged, 'title'>;
+            tr: PickProp<IManaged, 'tr'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+        }
         const ComboField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IItemsFieldProps {
+            value: PickProp<IManaged, 'value'>;
+            disabled: PickProp<IManaged, 'disabled'>;
+            description: PickProp<IManaged, 'description'>;
+            placeholder: PickProp<IManaged, 'placeholder'>;
+            outlined: PickProp<IManaged, 'outlined'>;
+            itemList: PickProp<IManaged, 'itemList'>;
+            title: PickProp<IManaged, 'title'>;
+            tr: PickProp<IManaged, 'tr'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+        }
         const ItemsField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
     namespace fields {
+        interface IRatingFieldProps {
+            value: PickProp<IManaged, 'value'>;
+            disabled: PickProp<IManaged, 'disabled'>;
+            readonly: PickProp<IManaged, 'readonly'>;
+            title: PickProp<IManaged, 'title'>;
+            onChange: PickProp<IManaged, 'onChange'>;
+        }
         const RatingField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
@@ -650,6 +783,11 @@ declare namespace form {
 declare namespace form {
     namespace components {
         const One: ({ LoadPlaceholder, ready, ...props }: IOneProps) => JSX.Element;
+        /**
+         * После написания формы можно включить строгую
+         * проверку типов полей
+         */
+        const OneTyped: (props: IOneTypedProps) => React.FunctionComponentElement<IOneTypedProps>;
     }
 }
 declare namespace form {
@@ -725,8 +863,48 @@ declare namespace form {
     }
 }
 declare namespace form {
+    type Exclude = Omit<IManaged, keyof IEntity> & {
+        type: never;
+        name: never;
+        fields: never;
+    };
+    type TypedFieldFactory<T extends FieldType, F extends {}> = {
+        [P in keyof Omit<F, keyof Exclude>]?: F[P];
+    } & {
+        type: T;
+    };
+    type TypedFieldFactoryShallow<T extends FieldType, F extends {}> = IManagedShallow & TypedFieldFactory<T, F>;
+    type Group = TypedFieldFactory<FieldType.Group, IManagedLayout>;
+    type Paper = TypedFieldFactory<FieldType.Paper, IManagedLayout>;
+    type Expansion = TypedFieldFactory<FieldType.Expansion, components.IExpansionProps>;
+    type Checkbox = TypedFieldFactoryShallow<FieldType.Checkbox, fields.ICheckboxFieldProps>;
+    type Combo = TypedFieldFactoryShallow<FieldType.Combo, fields.IComboFieldProps>;
+    type Component = TypedFieldFactoryShallow<FieldType.Component, fields.IComponentFieldProps>;
+    type Items = TypedFieldFactoryShallow<FieldType.Items, fields.IItemsFieldProps>;
+    type Line = TypedFieldFactoryShallow<FieldType.Line, fields.ILineFieldProps>;
+    type Progress = TypedFieldFactoryShallow<FieldType.Progress, fields.IProgressFieldProps>;
+    type Radio = TypedFieldFactoryShallow<FieldType.Radio, fields.IRadioFieldProps>;
+    type Rating = TypedFieldFactoryShallow<FieldType.Rating, fields.IRatingFieldProps>;
+    type Slider = TypedFieldFactoryShallow<FieldType.Slider, fields.ISliderFieldProps>;
+    type Switch = TypedFieldFactoryShallow<FieldType.Switch, fields.ISwitchFieldProps>;
+    type Text = TypedFieldFactoryShallow<FieldType.Text, fields.ITextFieldProps>;
+    /**
+     * Логическое ветвление компонентов
+     */
+    export type TypedFieldRegistry<T = any> = T extends Expansion ? Expansion : T extends Group ? Group : T extends Paper ? Paper : T extends Checkbox ? Checkbox : T extends Combo ? Combo : T extends Component ? Component : T extends Items ? Items : T extends Line ? Line : T extends Progress ? Progress : T extends Radio ? Radio : T extends Rating ? Rating : T extends Slider ? Slider : T extends Switch ? Switch : T extends Text ? Text : never;
+    /**
+     * Переопределяем подполя
+     */
+    export type TypedField = TypedFieldRegistry & {
+        name?: string;
+        fields?: TypedField[];
+    };
+    export {};
+}
+declare namespace form {
     const One: ({ LoadPlaceholder, ready, ...props }: IOneProps) => JSX.Element;
     const List: ({ className, fields, selection, limit, offset, total, canSelect, canDelete, canEdit, select, click, remove, handler, fallback, ...otherProps }: IListProps) => JSX.Element;
+    const OneTyped: (props: IOneTypedProps) => React.FunctionComponentElement<IOneTypedProps>;
     const Scaffold: (props: components.IScaffoldProps) => React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)>) | (new (props: any) => React.Component<any, any, any>)>;
     const Breadcrumbs: ({ back, save, currentTitle, backwardTitle, saveLabel, saveDisabled, className, ...otherProps }: {
         [x: string]: any;
@@ -740,42 +918,4 @@ declare namespace form {
     }) => JSX.Element;
     const compose: typeof utils.compose;
     const createKey: () => string;
-}
-declare namespace form {
-    /**
-     * Свойства, не доступные управляемому полю
-     */
-    type exclude = 'object' | 'type' | 'focus' | 'blur' | 'ready';
-    /**
-     * Возможные значения value
-     */
-    type v = number | string | boolean;
-    /**
-     * Свойства сущности, обернутой в компонент высшего порядка
-     */
-    export interface IManaged extends Omit<IEntity, exclude> {
-        /**
-         * Компонент высшего порядка перехватывает управление
-         */
-        columns?: never;
-        phoneColumns?: never;
-        tabletColumns?: never;
-        desktopColumns?: never;
-        isDisabled?: never;
-        isVisible?: never;
-        isInvalid?: never;
-        change?: never;
-        object?: never;
-        name?: never;
-        readonly?: never;
-        /**
-         * Компонент высшего порядка предоставляет удобную
-         * абстракцию
-         */
-        value: v;
-        disabled: boolean;
-        invalid: string | null;
-        onChange: (v: v) => void;
-    }
-    export {};
 }
