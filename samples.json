@@ -314,6 +314,11 @@
       "      Search panel",
       "    </Link>",
       "  </Typography>",
+      "  <Typography>",
+      "    <Link onClick={() => openBlank('./amazing-typography/')}>",
+      "      Typography",
+      "    </Link>",
+      "  </Typography>",
       "</div>",
       ""
     ]

@@ -19,15 +19,15 @@ declare namespace form {
         Slider = "slider",
         Combo = "combo",
         Items = "items",
-        Rating = "rating"
+        Rating = "rating",
+        Typography = "typography"
     }
 }
 declare namespace form {
-    type inputType = "text" | "color" | "date" | "email" | "month" | "number" | "password" | "search" | "tel" | "time" | "url" | "week";
     /**
      * Объект поля для прикладного программиста
      */
-    export interface IField {
+    interface IField {
         /**
          * Общие поля. Поле name позволяет задать забор
          * поля из целевого объекта, не нужен для group,
@@ -57,7 +57,20 @@ declare namespace form {
         /**
          * Поле type для MatTextField
          */
-        inputType?: inputType;
+        inputType?: keyof {
+            text: "text";
+            color: "color";
+            date: "date";
+            email: "email";
+            month: "month";
+            number: "number";
+            password: "password";
+            search: "search";
+            tel: "tel";
+            time: "time";
+            url: "url";
+            week: "week";
+        };
         /**
          * Делает TextField многострочным, если
          * inputRows больше единицы
@@ -187,8 +200,21 @@ declare namespace form {
          */
         fieldRightMargin?: number;
         fieldBottomMargin?: number;
+        /**
+         * Шрифт для поля Typography
+         */
+        typoVariant?: keyof {
+            h2: 'h2';
+            h3: 'h3';
+            h4: 'h4';
+            h5: 'h5';
+            h6: 'h6';
+            subtitle1: 'subtitle1';
+            subtitle2: 'subtitle2';
+            body1: 'body1';
+            body2: 'body2';
+        };
     }
-    export {};
 }
 declare namespace form {
     type exclude = 'defaultValue';
@@ -207,7 +233,7 @@ declare namespace form {
     export {};
 }
 declare namespace form {
-    interface IOneProps {
+    interface IOneProps<Field = IField> {
         /**
          * Позволяет загружать данные в компонент
          */
@@ -235,7 +261,7 @@ declare namespace form {
         /**
          * Массив полей, выводимый в компоненте
          */
-        fields: IField[];
+        fields: Field[];
         /**
          * Префикс для формирования ключей элементов
          */
@@ -244,13 +270,6 @@ declare namespace form {
          * Плейсхолдер, показываемый во время загрузки данных
          */
         LoadPlaceholder?: null | material.Element;
-    }
-    /**
-     * После написания формы можно включить
-     * строгую проверку полей
-     */
-    interface IOneTypedProps extends Omit<IOneProps, 'fields'> {
-        fields: TypedField[];
     }
 }
 declare namespace form {
@@ -418,7 +437,10 @@ declare namespace form {
 }
 declare namespace form {
     namespace utils {
-        const isManaged: (type: FieldType) => boolean;
+        const isField: ({ type, name }: {
+            type: any;
+            name: any;
+        }) => boolean;
     }
 }
 declare namespace form {
@@ -562,7 +584,7 @@ declare namespace form {
         fieldBottomMargin?: PickProp<IField, 'fieldBottomMargin'>;
     }
     /**
-     * Компонент высшего порядка makeManaged
+     * Компонент высшего порядка makeField
      * перехватывает управление над свойствами
      * поля
      */
@@ -629,7 +651,7 @@ declare namespace form {
          *    представлены invalid, disabled, visible и можно задваивать вызов onChange
          *  - Управляет фокусировкой, мануально ожидая потерю фокуса, эмулируя onBlur
          */
-        function makeManaged(Component: React.FC<Partial<IManaged>>, skipDebounce?: boolean): ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        function makeField(Component: React.FC<Partial<IManaged>>, skipDebounce?: boolean): ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -777,17 +799,30 @@ declare namespace form {
 }
 declare namespace form {
     namespace fields {
+        interface ITypographyFieldProps {
+            value: PickProp<IManaged, 'value'>;
+            placeholder: PickProp<IManaged, 'placeholder'>;
+            typoVariant: PickProp<IManaged, 'typoVariant'>;
+        }
+        const TypographyField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+    }
+}
+declare namespace form {
+    namespace fields {
         const createField: (entity: IEntity, currentPath?: string) => JSX.Element;
     }
 }
 declare namespace form {
     namespace components {
-        const One: ({ LoadPlaceholder, ready, ...props }: IOneProps) => JSX.Element;
+        const One: {
+            ({ LoadPlaceholder, ready, ...props }: IOneProps): JSX.Element;
+            typed: (props: IOneProps<TypedField>) => React.FunctionComponentElement<IOneProps<TypedField>>;
+        };
         /**
          * После написания формы можно включить строгую
          * проверку типов полей
          */
-        const OneTyped: (props: IOneTypedProps) => React.FunctionComponentElement<IOneTypedProps>;
+        const OneTyped: (props: IOneProps<TypedField>) => React.FunctionComponentElement<IOneProps<TypedField>>;
     }
 }
 declare namespace form {
@@ -888,10 +923,12 @@ declare namespace form {
     type Slider = TypedFieldFactoryShallow<FieldType.Slider, fields.ISliderFieldProps>;
     type Switch = TypedFieldFactoryShallow<FieldType.Switch, fields.ISwitchFieldProps>;
     type Text = TypedFieldFactoryShallow<FieldType.Text, fields.ITextFieldProps>;
+    type Typography = TypedFieldFactoryShallow<FieldType.Typography, fields.ITypographyFieldProps>;
     /**
      * Логическое ветвление компонентов
+     * Typescript type-guard
      */
-    export type TypedFieldRegistry<T = any> = T extends Expansion ? Expansion : T extends Group ? Group : T extends Paper ? Paper : T extends Checkbox ? Checkbox : T extends Combo ? Combo : T extends Component ? Component : T extends Items ? Items : T extends Line ? Line : T extends Progress ? Progress : T extends Radio ? Radio : T extends Rating ? Rating : T extends Slider ? Slider : T extends Switch ? Switch : T extends Text ? Text : never;
+    export type TypedFieldRegistry<T = any> = T extends Expansion ? Expansion : T extends Group ? Group : T extends Paper ? Paper : T extends Checkbox ? Checkbox : T extends Combo ? Combo : T extends Component ? Component : T extends Items ? Items : T extends Line ? Line : T extends Progress ? Progress : T extends Radio ? Radio : T extends Rating ? Rating : T extends Slider ? Slider : T extends Switch ? Switch : T extends Text ? Text : T extends Typography ? Typography : never;
     /**
      * Переопределяем подполя
      */
@@ -902,9 +939,12 @@ declare namespace form {
     export {};
 }
 declare namespace form {
-    const One: ({ LoadPlaceholder, ready, ...props }: IOneProps) => JSX.Element;
+    const One: {
+        ({ LoadPlaceholder, ready, ...props }: IOneProps<IField>): JSX.Element;
+        typed: (props: IOneProps<TypedField>) => React.FunctionComponentElement<IOneProps<TypedField>>;
+    };
     const List: ({ className, fields, selection, limit, offset, total, canSelect, canDelete, canEdit, select, click, remove, handler, fallback, ...otherProps }: IListProps) => JSX.Element;
-    const OneTyped: (props: IOneTypedProps) => React.FunctionComponentElement<IOneTypedProps>;
+    const OneTyped: (props: IOneProps<TypedField>) => React.FunctionComponentElement<IOneProps<TypedField>>;
     const Scaffold: (props: components.IScaffoldProps) => React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)>) | (new (props: any) => React.Component<any, any, any>)>;
     const Breadcrumbs: ({ back, save, currentTitle, backwardTitle, saveLabel, saveDisabled, className, ...otherProps }: {
         [x: string]: any;
