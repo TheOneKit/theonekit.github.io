@@ -11,10 +11,14 @@
     <script src="./index.js"></script>
     <style>
       html {
-        background: #212121;
         user-select: none;
         scrollbar-width: none;
         -ms-overflow-style: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: #212121;
+        }
       }
       body::-webkit-scrollbar-button,
       body::-webkit-scrollbar-track,
@@ -28,8 +32,8 @@
     <script src="./3rdparty/ace@1.4.12/theme-twilight.js"></script>
     <script src="./3rdparty/ace@1.4.12/theme-chrome.js"></script>
     <script src="./3rdparty/ace@1.4.12/worker-javascript.js"></script>
-    <title>The One most advanced form creation kit form creation kit for React</title>
-    <meta name="description" content="The One most advanced form creation kit form creation kit for React."/>
+    <title>The One most advanced form creation kit for React</title>
+    <meta name="description" content="The One most advanced form creation kit for React"/>
   </head>
   <body>
     <div id="mount-point"></div>
