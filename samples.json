@@ -152,7 +152,8 @@
       "      },",
       "      invalidity() {",
       "        snack('It looks like form has invalid value in the field. The save button should be disabled');",
-      "      }",
+      "      },",
+      "    }",
       "  ]}",
       "/>",
       ""
