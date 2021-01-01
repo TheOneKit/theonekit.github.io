@@ -138,6 +138,7 @@
       "  fields={[",
       "    {",
       "      type: FieldType.Text,",
+      "      inputType: 'number',",
       "      title: 'Only number allowed',",
       "      description: 'Which will not be greater or lower than 42',",
       "      name: 'text',",
