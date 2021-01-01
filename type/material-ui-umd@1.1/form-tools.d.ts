@@ -190,6 +190,11 @@ declare namespace form {
          */
         compute?: (v: any, change?: (v: any) => void) => any;
         /**
+         * Коллбек, вызываемый у поля при не прохождении
+         * валидации
+         */
+        invalidity?: (e: string) => any;
+        /**
          * Значение по-умолчанию для поля
          */
         defaultValue?: string | number | boolean;
@@ -242,6 +247,11 @@ declare namespace form {
          * Вызывается при ошибке в handler
          */
         fallback?: (e: Error) => void;
+        /**
+         * Коллбек, вызываемый при не прохождении
+         * валидации
+         */
+        invalidity?: (e: string) => any;
         /**
          * Вызываются при фокусировки по филду
          * в компоненте и потере фокуса
@@ -592,6 +602,7 @@ declare namespace form {
         isDisabled?: PickProp<IField, 'isDisabled'>;
         isVisible?: PickProp<IField, 'isVisible'>;
         isInvalid?: PickProp<IField, 'isInvalid'>;
+        invalidity?: PickProp<IField, 'invalidity'>;
         compute?: PickProp<IField, 'compute'>;
         defaultValue?: v;
     }
@@ -651,7 +662,7 @@ declare namespace form {
          *    представлены invalid, disabled, visible и можно задваивать вызов onChange
          *  - Управляет фокусировкой, мануально ожидая потерю фокуса, эмулируя onBlur
          */
-        function makeField(Component: React.FC<Partial<IManaged>>, skipDebounce?: boolean): ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        function makeField(Component: React.FC<Partial<IManaged>>, skipDebounce?: boolean): ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -662,7 +673,7 @@ declare namespace form {
             onChange: PickProp<IManaged, 'onChange'>;
             title: PickProp<IManaged, 'title'>;
         }
-        const CheckboxField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const CheckboxField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -670,7 +681,7 @@ declare namespace form {
         interface ILineFieldProps {
             title: PickProp<IManaged, 'title'>;
         }
-        const LineField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const LineField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -682,7 +693,7 @@ declare namespace form {
             title: PickProp<IManaged, 'title'>;
             radioValue: PickProp<IManaged, 'radioValue'>;
         }
-        const RadioField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const RadioField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -693,7 +704,7 @@ declare namespace form {
             onChange: PickProp<IManaged, 'onChange'>;
             title: PickProp<IManaged, 'title'>;
         }
-        const SwitchField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const SwitchField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -714,7 +725,7 @@ declare namespace form {
             placeholder: PickProp<IManaged, 'placeholder'>;
             onChange: PickProp<IManaged, 'onChange'>;
         }
-        const TextField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const TextField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -726,7 +737,7 @@ declare namespace form {
             showPercentLabel: PickProp<IManaged, 'showPercentLabel'>;
             value: PickProp<IManaged, 'value'>;
         }
-        const ProgressField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const ProgressField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -734,7 +745,7 @@ declare namespace form {
         interface IComponentFieldProps {
             value: PickProp<IManaged, 'value'>;
         }
-        const ComponentField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const ComponentField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -750,7 +761,7 @@ declare namespace form {
             sliderTrackColor: PickProp<IManaged, 'sliderTrackColor'>;
             sliderRailColor: PickProp<IManaged, 'sliderRailColor'>;
         }
-        const SliderField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const SliderField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -766,7 +777,7 @@ declare namespace form {
             tr: PickProp<IManaged, 'tr'>;
             onChange: PickProp<IManaged, 'onChange'>;
         }
-        const ComboField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const ComboField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -782,7 +793,7 @@ declare namespace form {
             tr: PickProp<IManaged, 'tr'>;
             onChange: PickProp<IManaged, 'onChange'>;
         }
-        const ItemsField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const ItemsField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -794,7 +805,7 @@ declare namespace form {
             title: PickProp<IManaged, 'title'>;
             onChange: PickProp<IManaged, 'onChange'>;
         }
-        const RatingField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const RatingField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -804,7 +815,7 @@ declare namespace form {
             placeholder: PickProp<IManaged, 'placeholder'>;
             typoVariant: PickProp<IManaged, 'typoVariant'>;
         }
-        const TypographyField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
+        const TypographyField: ({ className, columns, phoneColumns, tabletColumns, desktopColumns, isDisabled, isVisible, isInvalid, change, ready, compute, object, name, focus, blur, invalidity, readonly, style, fieldRightMargin, fieldBottomMargin, ...otherProps }: IEntity) => JSX.Element;
     }
 }
 declare namespace form {
@@ -898,11 +909,7 @@ declare namespace form {
     }
 }
 declare namespace form {
-    type Exclude = Omit<IManaged, keyof IEntity> & {
-        type: never;
-        name: never;
-        fields: never;
-    };
+    type Exclude = Omit<IManaged, keyof IEntity>;
     type TypedFieldFactory<T extends FieldType, F extends {}> = {
         [P in keyof Omit<F, keyof Exclude>]?: F[P];
     } & {

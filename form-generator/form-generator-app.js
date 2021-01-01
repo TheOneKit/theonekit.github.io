@@ -508,7 +508,7 @@ var app;
 var app;
 /// <reference path="../data/peoples.ts"/>
 (function (app) {
-    var Breadcrumbs = form.Breadcrumbs, FieldType = form.FieldType, One = form.One;
+    var Breadcrumbs = form.Breadcrumbs, FieldType = form.FieldType, OneTyped = form.OneTyped, One = form.One;
     var useSnack = other.snack.useSnack;
     var Box = material.core.Box;
     var useRouter = router.useRouter;
@@ -646,6 +646,16 @@ var app;
                                 name: 'email',
                                 type: FieldType.Text,
                                 isDisabled: function (obj) { return !obj.subscribed; },
+                                isInvalid: function (_a) {
+                                    var email = _a.email;
+                                    var expr = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+                                    if (!expr.test(email)) {
+                                        return 'Указан неверный адрес электронной почты';
+                                    }
+                                    else {
+                                        return null;
+                                    }
+                                },
                                 title: 'Почта',
                                 description: 'tripolskypetr@gmail.com'
                             },
@@ -716,7 +726,12 @@ var app;
             var go = useRouter();
             var back = function () { return go('/list'); };
             var handler = function () { return app.data.get(id); };
-            var change = function (obj) { return setChangedObj(obj); };
+            var change = function (obj, initial) {
+                if (!initial) {
+                    setChangedObj(obj);
+                }
+            };
+            var invalid = function () { return setChangedObj(null); };
             var onSave = useCallback(function () {
                 app.data.patch(changedObj);
                 snack('Сохранено!');
@@ -724,7 +739,7 @@ var app;
             }, [changedObj]);
             return (React.createElement(Fragment, null,
                 React.createElement(Breadcrumbs, { currentTitle: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C", backwardTitle: "\u0421\u043F\u0438\u0441\u043E\u043A \u043F\u0440\u043E\u0444\u0438\u043B\u0435\u0439", saveDisabled: !changedObj, save: function () { return onSave(); }, back: back }),
-                React.createElement(One, { fields: fields, handler: handler, change: change })));
+                React.createElement(One.typed, { fields: fields, invalidity: invalid, handler: handler, change: change })));
         };
     })(pages = app.pages || (app.pages = {})); // namespace pages
 })(app || (app = {})); // namespace app
