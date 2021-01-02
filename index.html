@@ -11,15 +11,16 @@
     <link rel="manifest" href="manifest.json">
     <script data-mode="defer" src="./index.js"></script>
     <style>
-      html {
+      @media (prefers-color-scheme: dark) {
+        html, body {
+          background: #212121;
+          min-height: 100vh;
+        }
+      }
+      * {
         user-select: none;
         scrollbar-width: none;
         -ms-overflow-style: none;
-      }
-      @media (prefers-color-scheme: dark) {
-        html {
-          background: #212121;
-        }
       }
       *::-webkit-scrollbar-button,
       *::-webkit-scrollbar-track,
