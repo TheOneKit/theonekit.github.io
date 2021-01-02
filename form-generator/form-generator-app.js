@@ -1157,4 +1157,3 @@ var app;
         return ReactDOM.render(React.createElement(App, null), document.querySelector('#mount-point'));
     };
 })(app || (app = {})); // namespace app
-//# sourceMappingURL=form-generator-app.js.map

@@ -3,7 +3,9 @@
   const {protocol} = location;
   const origin = `${protocol}//theonekit.github.io`;
 
-  const template = (url) => `\x3Cscript type="text/javascript" src="${origin}/${url}">\x3C/script>`;
+  const {mode} = document.currentScript.dataset;
+
+  const template = (url) => `\x3Cscript type="text/javascript" ${mode || ''} src="${origin}/${url}">\x3C/script>`;
 
   window.React || document.write(template("3rdparty/react@16.13.1/react.development.js"));
   window.ReactDOM || document.write(template("3rdparty/react-dom@16.13.1/react-dom.development.js"));
