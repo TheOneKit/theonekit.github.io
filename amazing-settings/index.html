@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://theonekit.github.io/3rdparty/typeface-roboto@0.0.75/typeface-roboto.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
 
 <script src="https://theonekit.github.io/index.js"></script>
 
@@ -66,6 +67,7 @@
 
     const createDimension = (title, icon) => ({
       type: FieldType.Paper,
+      phoneColumns: '12',
       columns: '4',
       fields: [
         {
@@ -115,6 +117,7 @@
       },
       {
         type: FieldType.Group,
+        phoneColumns: '12',
         columns: '6',
         fields: [
           {
@@ -183,6 +186,7 @@
       },
       {
         type: FieldType.Group,
+        phoneColumns: '12',
         columns: '6',
         fields: [
           {
@@ -252,8 +256,6 @@
         ],
       },
     ];
-
-    window.fields = fields;
 
     const App = () => (
       <MuiThemeProvider theme={THEME_DARK}>
