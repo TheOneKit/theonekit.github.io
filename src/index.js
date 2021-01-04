@@ -9,8 +9,10 @@
   const {
     DateProvider,
     TimeProvider,
+    OneProvider,
     useDate,
     useTime,
+    useOne,
   } = pickers;
 
   const {
@@ -178,6 +180,7 @@
     VolumeUp,
     CalendarToday,
     Alarm,
+    Face,
   } = material.icons;
 
   const {
@@ -416,6 +419,7 @@
     const [index, setIndex] = useState(0);
     const pickDate = useDate();
     const pickTime = useTime();
+    const pickOne = useOne();
     const snack = useSnack();
     return (
       <Paper className={classes.root}>
@@ -510,14 +514,16 @@
           <DateProvider>
             <TimeProvider>
               <SnackProvider>
-                <CssBaseline />
-                <Header
-                  onIsDarkChange={() => setIsDark(!isDark)}
-                  isDark={isDark}
-                />
-                <Container>
-                  <Content isDark={isDark} />
-                </Container>
+                <OneProvider>
+                  <CssBaseline />
+                  <Header
+                    onIsDarkChange={() => setIsDark(!isDark)}
+                    isDark={isDark}
+                  />
+                  <Container>
+                    <Content isDark={isDark} />
+                  </Container>
+                </OneProvider>
               </SnackProvider>
             </TimeProvider>
           </DateProvider>
