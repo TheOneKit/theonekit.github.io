@@ -265,7 +265,8 @@
   {
     "title": "Modal pickers",
     "description": [
-      "Mobile-first modal date and time pickers"
+      "Mobile-first modal date and time pickers. Also there is \"One\" component based",
+      "user input dialog which helps keep single responsibility principle on page"
     ],
     "lines": [
       "<One fields={[",
