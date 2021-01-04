@@ -7,29 +7,35 @@
 <div id="mount-point"></div>
 
 <script type="text/babel">
-  (function() {
-  
+  (function () {
+
     const {
       createElement: h,
       Fragment,
     } = React;
-  
+
     const {
       One,
-      FieldType
+      FieldType,
     } = form;
-  
+
     const {
       Box,
       Link,
       Typography,
     } = material.core;
-  
+
     const {
       MuiThemeProvider,
       createMuiTheme,
     } = material.core;
-  
+
+    const {
+      Tv,
+      Palette,
+      FullscreenExit,
+    } = material.icons;
+
     const THEME_DARK = createMuiTheme({
       palette: {
         type: 'dark',
@@ -54,11 +60,59 @@
         },
       },
     });
-  
-    const Hr = () => <Box style={{height: '1px', background: '#808080', margin: '5px 0px 10px 0'}}/>;
-    const Logo = () => <img style={{width: '100%', maxHeight: '64px', objectFit: 'contain'}} src="star.png"/>;
-  
+
+    const Hr = () => <Box style={{ height: '1px', background: '#808080', margin: '5px 0px 10px 0' }} />;
+    const Logo = () => <img style={{ width: '100%', maxHeight: '64px', objectFit: 'contain' }} src="star.png" />;
+
+    const createDimension = (title, icon) => ({
+      type: FieldType.Paper,
+      columns: '4',
+      fields: [
+        {
+          type: FieldType.Typography,
+          typoVariant: 'body1',
+          placeholder: title.toUpperCase(),
+          fieldRightMargin: 1,
+          fieldBottomMargin: 0,
+        },
+        {
+          type: FieldType.Typography,
+          typoVariant: 'body2',
+          style: {
+            fontWeight: '300',
+            maxHeight: '60px',
+            overflow: 'hidden',
+          },
+          placeholder: `
+            The size of a screen is  usually  described by the  length of its 
+            diagonal, which is the distance between opposite corners, usually 
+            in inches. It is also sometimes called the physical image size
+          `,
+        },
+        {
+          type: FieldType.Component,
+          fieldBottomMargin: 0,
+          compute: () => (
+            <Box display="flex" justifyContent="center">
+              {h(icon, { style: { fontSize: '50px' } })}
+            </Box>
+          ),
+        },
+        {
+          type: FieldType.Slider,
+        },
+      ],
+    });
+
     const fields = [
+      {
+        type: FieldType.Group,
+        fields: [
+          createDimension('Screen size', Tv),
+          createDimension('Chromatic aberration', Palette),
+          createDimension('Field of view', FullscreenExit),
+        ],
+      },
       {
         type: FieldType.Group,
         columns: '6',
@@ -73,7 +127,7 @@
               {
                 type: FieldType.Component,
                 columns: '2',
-                style: {maxWidth: '64px'},
+                style: { maxWidth: '64px' },
                 compute: Logo,
               },
               {
@@ -96,7 +150,7 @@
                 type: FieldType.Component,
                 compute: () => (
                   <Box display="flex" flexDirection="column">
-                    <Hr/>
+                    <Hr />
                     <Typography variant="body2">
                       <Link href="https://theonekit.com" target="_blank">Official site</Link>
                     </Typography>
@@ -163,8 +217,8 @@
                     <Typography variant="body2">
                       Regulates performance and traffic consumption. Actual performance
                       depends on network connection and system. This parameter will be
-                      applied the next time you...  
-                    </Typography>
+                      applied the next time you...
+                  </Typography>
                   </Box>
                 ),
               },
@@ -198,15 +252,16 @@
         ],
       },
     ];
-  
+
+    window.fields = fields;
+
     const App = () => (
       <MuiThemeProvider theme={THEME_DARK}>
-        <One fields={fields}/>
+        <One fields={fields} />
       </MuiThemeProvider>
     );
-  
-    ReactDOM.render(<App/>, document.querySelector('#mount-point'));
-  
+
+    ReactDOM.render(<App />, document.querySelector('#mount-point'));
+
   })();
-  </script>
-  
+</script>
