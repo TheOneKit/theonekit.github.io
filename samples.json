@@ -357,6 +357,11 @@
       "      Typography",
       "    </Link>",
       "  </Typography>",
+      "  <Typography>",
+      "    <Link onClick={() => openBlank('https://github.com/tripolskypetr/react-view-builder')}>",
+      "      NPM package",
+      "    </Link>",
+      "  </Typography>",
       "</div>",
       ""
     ]
